@@ -5,8 +5,8 @@ import numpy as np
 class NeuralNetwork:
 
     def __init__(self):
-        self.layerNumber = 2
         self.nodesByLayer = [4, 5, 2]
+        self.layerNumber = len(self.nodesByLayer)-2
         self.fitness = 0
         self.tag = uuid.uuid1()
         self.network = []

@@ -53,8 +53,8 @@ class GeneticAlgorithm:
                 for layerIndex in range(len(self.subjects[i].network)):
                     original = self.subjects[i].network[layerIndex].copy()
                     random_mask = np.random.random_sample((self.subjects[i].nodesByLayer[layerIndex], self.subjects[i].nodesByLayer[layerIndex+1]))
-                    random_values = np.dot(np.subtract(np.random.random_sample((self.subjects[i].nodesByLayer[layerIndex], self.subjects[i].nodesByLayer[layerIndex+1])), 1), self.mutation_magnitude)
+                    random_values = np.subtract(np.dot(np.random.random_sample((self.subjects[i].nodesByLayer[layerIndex], self.subjects[i].nodesByLayer[layerIndex+1])), 2), 1)
                     m = np.ma.masked_where(mut_rate > random_mask, self.subjects[i].network[layerIndex])
-                    original[np.where(m.mask)] += random_values[np.where(m.mask)]
+                    original[np.where(m.mask)] = random_values[np.where(m.mask)]
                     self.subjects[i].network[layerIndex] = original.copy()
                         

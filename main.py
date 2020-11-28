@@ -6,11 +6,11 @@ import uuid
 def main():
 
     epochs = 1000
-    graphing_epoch_interval = 10000
+    graphing_epoch_interval = 10
     population = 100
     max_time = 500
-    mutation_rate = 0.2
-    mutation_magnitude = 0.1
+    mutation_rate = 0.1
+    mutation_magnitude = 1
     bots_mutated = 98
     weight = 0.1
     bounds = 10
@@ -22,7 +22,7 @@ def main():
     plt = Plotter(max_time)
     env = Environment(weight, bounds, degree_interval)
     ga = GeneticAlgorithm(population, mutation_rate, mutation_magnitude, bots_mutated)
-    ga.load('trained_model_125d3f78-31b5-11eb-98c3-784f4381b3ea.csv')
+    ga.load('trained_model_d68a64a6-31c0-11eb-a773-784f4381b3ea.csv')
 
     for gen in range(epochs):
         print("\nGEN: "+str(gen))
@@ -32,7 +32,7 @@ def main():
             for time in range(max_time):
                 action = ga.subjects[bot].forward(state)
                 state = env.step(action)  
-                if gen % graphing_epoch_interval == 0 and gen != 0:
+                if gen % graphing_epoch_interval == 0:
                     plt.plot(time, env.deg)
                 if env.terminated:
                     ga.subjects[bot].fitness = time
@@ -44,6 +44,7 @@ def main():
                     return
         ga.compute_generation()
         print(str(ga.fittestIndex)+": "+str(ga.subjects[ga.fittestIndex].fitness))
+        print(ga.subjects[ga.fittestIndex].network)
         ga.reset()
         if gen == epochs-1:
             file = open('timeout_model_'+str(uuid.uuid1())+'.csv', "w")
