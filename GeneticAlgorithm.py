@@ -51,10 +51,20 @@ class GeneticAlgorithm:
         for i in range(len(self.subjects)):
             if i >= len(self.subjects)-self.bots_mutated:
                 for layerIndex in range(len(self.subjects[i].network)):
-                    original = self.subjects[i].network[layerIndex].copy()
+
+                    # Copy original net
+                    original = self.subjects[i].network[layerIndex].copy() 
+
+                    # Create random samples
                     random_mask = np.random.random_sample((self.subjects[i].nodesByLayer[layerIndex], self.subjects[i].nodesByLayer[layerIndex+1]))
                     random_values = np.subtract(np.dot(np.random.random_sample((self.subjects[i].nodesByLayer[layerIndex], self.subjects[i].nodesByLayer[layerIndex+1])), 2), 1)
+                    
+                    # Create mask of random indexes
                     m = np.ma.masked_where(mut_rate > random_mask, self.subjects[i].network[layerIndex])
+
+                    # Assign random values to the masked indexes
                     original[np.where(m.mask)] = random_values[np.where(m.mask)]
+
+                    # Set new net to the old copy
                     self.subjects[i].network[layerIndex] = original.copy()
                         

@@ -5,6 +5,8 @@ import numpy as np
 class NeuralNetwork:
 
     def __init__(self):
+
+        # NET ARCHITECTURE
         self.nodesByLayer = [4, 5, 2]
         self.layerNumber = len(self.nodesByLayer)-2
         self.fitness = 0
@@ -25,5 +27,5 @@ class NeuralNetwork:
     def forward(self, x):
         x = np.array(x).flatten()
         for layer in range(len(self.network)):
-            x = self.linear(x, layer)
+            x = self.linear(x, layer) # Compute one layer of the net
         return x

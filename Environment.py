@@ -1,19 +1,36 @@
 import math
 from scipy import constants
+import numpy as np
 
 class Environment:
 
-    terminated = False
+    test_cases = np.array([
+            [[0,0],[0,0],[0,0]],
+            [[5,0],[0.5,0],[0,0]],
+            [[0,5],[0.0,0.5],[0,0]],
+            [[-5,0],[-0.5,0],[0,0]],
+            [[0,-5],[0,-0.5],[0,0]],
+            [[5,5],[0.5,0.5],[0,0]],
+            [[-5,-5],[-0.5,-0.5],[0,0]],
+            [[0,0],[0.5,-0.5],[0,0]],
+            [[5,0],[0,-0.5],[0,0]],
+            [[0,5],[-0.5,0.5],[0,0]],
+            [[-5,0],[0,0],[0,0]],
+            [[0,-5],[0.5,0.5],[0,0]],
+            [[5,5],[0,-0.5],[0,0]],
+            [[-5,-5],[0.5,0.5],[0,0]],
+        ])
     def __init__(self, weight, bounds, di):
+        self.terminated = False
         self.weight = weight
         self.bounds = bounds
         self.degree_interval = di
-        self.reset()
+        self.reset(0)
 
-    def reset(self):
-        self.pos = [0,0]
-        self.vel = [0.1,-0.3]
-        self.deg = [0,0]
+    def reset(self, ci):
+        self.pos = Environment.test_cases[ci][0].copy()
+        self.vel = Environment.test_cases[ci][1].copy()
+        self.deg = Environment.test_cases[ci][2].copy()
         self.terminated = False
         return [self.pos, self.vel]
     
