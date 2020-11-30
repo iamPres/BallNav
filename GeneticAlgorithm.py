@@ -1,4 +1,4 @@
-from NeuralNetwork import NeuralNetwork 
+from NeuralNetwork import NeuralNetwork
 import math
 import numpy as np
 
@@ -22,13 +22,13 @@ class GeneticAlgorithm:
 
     def calc_fittest(self):
         index = 0
-        temp = 0
+        temp = math.inf
         for count, i in enumerate(self.subjects):
-            if i.fitness > temp:
+            if i.fitness < temp:
                 temp = i.fitness
                 index = count
         self.fittestIndex = index
-    
+
     def load(self, fileName):
         file = open(fileName, "r")
         layers = file.read().split('array(')[1:]
@@ -53,12 +53,12 @@ class GeneticAlgorithm:
                 for layerIndex in range(len(self.subjects[i].network)):
 
                     # Copy original net
-                    original = self.subjects[i].network[layerIndex].copy() 
+                    original = self.subjects[i].network[layerIndex].copy()
 
                     # Create random samples
                     random_mask = np.random.random_sample((self.subjects[i].nodesByLayer[layerIndex], self.subjects[i].nodesByLayer[layerIndex+1]))
                     random_values = np.subtract(np.dot(np.random.random_sample((self.subjects[i].nodesByLayer[layerIndex], self.subjects[i].nodesByLayer[layerIndex+1])), 2), 1)
-                    
+
                     # Create mask of random indexes
                     m = np.ma.masked_where(mut_rate > random_mask, self.subjects[i].network[layerIndex])
 
@@ -67,4 +67,3 @@ class GeneticAlgorithm:
 
                     # Set new net to the old copy
                     self.subjects[i].network[layerIndex] = original.copy()
-                        

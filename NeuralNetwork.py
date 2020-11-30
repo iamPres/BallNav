@@ -7,15 +7,15 @@ class NeuralNetwork:
     def __init__(self):
 
         # NET ARCHITECTURE
-        self.nodesByLayer = [4, 5, 2]
-        self.layerNumber = len(self.nodesByLayer)-2
-        self.fitness = 0
+        self.nodesByLayer = [6, 7, 2]
+        self.layerNumber = len(self.nodesByLayer)-1
+        self.fitness = math.inf
         self.tag = uuid.uuid1()
         self.network = []
 
         for i in range(self.layerNumber):
-            #layer = np.subtract(np.dot(np.random.random_sample((self.nodesByLayer[i], self.nodesByLayer[i+1])), 2), 1)
-            layer = np.zeros((self.nodesByLayer[i], self.nodesByLayer[i+1]))
+            layer = np.subtract(np.dot(np.random.random_sample((self.nodesByLayer[i], self.nodesByLayer[i+1])), 2), 1)
+            #layer = np.zeros((self.nodesByLayer[i], self.nodesByLayer[i+1]))
             self.network.append(layer)
 
     def linear(self, x, layerIndex):

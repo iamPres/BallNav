@@ -2,17 +2,18 @@ from Environment import Environment
 from GeneticAlgorithm import GeneticAlgorithm
 from Plotter import Plotter
 import uuid
+import numpy as np
 
 def main():
 
     # HYPER-PARAMETERS
     epochs = 1000
-    graphing_epoch_interval = 100000
-    population = 100
-    max_time = 1000
+    graphing_enabled = False
+    population = 10
+    max_time = 20
     mutation_rate = 0.1
     mutation_magnitude = 1
-    bots_mutated = 98
+    bots_mutated = 9
     weight = 0.1
     bounds = 10
     degree_interval = 5
@@ -30,43 +31,32 @@ def main():
         # LOOP THROUGH BOTS
         for bot in range(ga.popSize):
 
-            cases_completed = 0
-            fitness = 0
-
             # LOOP THROUGH CASES
             for caseIndex in range(len(Environment.test_cases)):
                 plt.reset()
                 state = env.reset(caseIndex)
-                case_time = 0
 
                 # SIMULATION LOOP
                 for time in range(max_time):
-                    case_time = time
                     action = ga.subjects[bot].forward(state)
                     state = env.step(action)
-                    if env.terminated:
-                        break
-                    if time == max_time-1:
-                        cases_completed += 1
 
                     # PLOTTER
-                    if gen % graphing_epoch_interval == 0 and gen != 0:
+                    if graphing_enabled == True:
                         plt.plot(time, env.deg)
+                ga.subjects[bot].fitness += np.sum(np.abs(state[1]))+np.sum(np.abs(state[0]))
 
-                # SAVE TRAINED
-                if cases_completed == len(Environment.test_cases):
-                    file = open('trained_model_'+str(uuid.uuid1())+'.csv', "w")
-                    file.write(str(ga.subjects[bot].network))
-                    file.close()
-                    return
-
-                fitness += case_time
-
-            ga.subjects[bot].fitness = cases_completed*fitness
+            # SAVE TRAINED
+            if ga.subjects[bot].fitness < 1:
+                file = open('trained_model_'+str(uuid.uuid1())+'.csv', "w")
+                file.write(str(ga.subjects[bot].network))
+                file.close()
+                return
+            
 
         # RESET
         ga.compute_generation()
-        print("FITTEST: "+str(ga.fittestIndex)+": "+str(ga.subjects[ga.fittestIndex].fitness)+"/"+str((len(Environment.test_cases)**2)*max_time))
+        print("FITTEST: "+str(ga.fittestIndex)+": "+str(ga.subjects[ga.fittestIndex].fitness))
         print("NETWORK: "+str(ga.subjects[ga.fittestIndex].network))
         print("-----")
         ga.reset()
