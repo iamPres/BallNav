@@ -7,7 +7,7 @@ def main():
 
     # HYPER-PARAMETERS
     epochs = 1000
-    graphing_epoch_interval = 1
+    graphing_epoch_interval = 100000
     population = 100
     max_time = 1000
     mutation_rate = 0.1
@@ -29,7 +29,7 @@ def main():
 
         # LOOP THROUGH BOTS
         for bot in range(ga.popSize):
-            
+
             cases_completed = 0
             fitness = 0
 
@@ -43,14 +43,14 @@ def main():
                 for time in range(max_time):
                     case_time = time
                     action = ga.subjects[bot].forward(state)
-                    state = env.step(action)  
+                    state = env.step(action)
                     if env.terminated:
-                        break                
+                        break
                     if time == max_time-1:
                         cases_completed += 1
-                    
+
                     # PLOTTER
-                    if gen % graphing_epoch_interval == 0:
+                    if gen % graphing_epoch_interval == 0 and gen != 0:
                         plt.plot(time, env.deg)
 
                 # SAVE TRAINED
@@ -59,7 +59,7 @@ def main():
                     file.write(str(ga.subjects[bot].network))
                     file.close()
                     return
-                
+
                 fitness += case_time
 
             ga.subjects[bot].fitness = cases_completed*fitness
