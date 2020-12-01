@@ -8,11 +8,11 @@ def main():
 
     # HYPER-PARAMETERS
     epochs = 1000
-    graphing_enabled = False
+    graphing_enabled = True
     population = 10
-    max_time = 20
-    mutation_rate = 0.1
-    mutation_magnitude = 1
+    max_time = 50
+    mutation_rate = 0.05
+    mutation_magnitude = 0.05
     bots_mutated = 9
     weight = 0.1
     bounds = 10
@@ -47,7 +47,8 @@ def main():
                 ga.subjects[bot].fitness += np.sum(np.abs(state[1]))+np.sum(np.abs(state[0]))
 
             # SAVE TRAINED
-            if ga.subjects[bot].fitness < 1:
+            print(ga.subjects[bot].fitness)
+            if ga.subjects[bot].fitness < 0.1:
                 file = open('trained_model_'+str(uuid.uuid1())+'.csv', "w")
                 file.write(str(ga.subjects[bot].network))
                 file.close()
